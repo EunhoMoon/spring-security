@@ -6,14 +6,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.janek.securityjava.common.TokenGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
 @Entity(name = "USERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User implements UserDetails {
 
     private final static String TOKEN_PREFIX = "USER-";
 
@@ -46,7 +50,32 @@ public class User {
         this.authorities.add(new Authority(Role.USER));
     }
 
-    public boolean isActive() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        var roleNames = this.authorities.stream()
+            .map(authority -> authority.getAuthority().name())
+            .toList();
+
+        return AuthorityUtils.createAuthorityList(roleNames);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.status.equals(Status.ACTIVE);
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.status.equals(Status.ACTIVE);
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.status.equals(Status.ACTIVE);
+    }
+
+    @Override
+    public boolean isEnabled() {
         return this.status.equals(Status.ACTIVE);
     }
 
