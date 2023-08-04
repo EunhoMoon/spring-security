@@ -1,25 +1,23 @@
 package me.janek.securityjava.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
+@Entity(name = "AUTHORITIES")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Authorities {
+public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private Role authority;
 
-    public Authorities(String authority) {
+    public Authority(Role authority) {
         this.authority = authority;
     }
 

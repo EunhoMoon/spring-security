@@ -1,4 +1,4 @@
-package me.janek.securityjava.controller;
+package me.janek.securityjava.interfaces;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.web.csrf.CsrfToken;

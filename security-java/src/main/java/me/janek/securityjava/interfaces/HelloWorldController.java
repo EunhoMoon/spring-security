@@ -1,4 +1,4 @@
-package me.janek.securityjava.controller;
+package me.janek.securityjava.interfaces;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
