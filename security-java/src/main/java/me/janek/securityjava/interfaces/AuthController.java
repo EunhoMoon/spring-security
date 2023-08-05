@@ -2,12 +2,14 @@ package me.janek.securityjava.interfaces;
 
 import lombok.RequiredArgsConstructor;
 import me.janek.securityjava.common.JwtProvider;
+import me.janek.securityjava.domain.User;
 import me.janek.securityjava.domain.UserAuthenticationService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,8 +50,9 @@ public class AuthController {
     }
 
     @GetMapping("/api/auth-test")
-    public ResponseEntity<String> authTest() {
-        return ResponseEntity.status(HttpStatus.OK).body("인증된 사용자");
+    public ResponseEntity<String> authTest(@AuthenticationPrincipal User user) {
+        String result = "인증된 사용자: " + user.getUsername();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 }
