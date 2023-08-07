@@ -32,7 +32,7 @@ public class JwtSecurityConfiguration {
                 .requestMatchers(new AntPathRequestMatcher("/api/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/refresh-token")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/h2-console")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

@@ -59,6 +59,7 @@ public class UserAuthenticationService implements UserDetailsService {
         var refreshTokenObj = refreshTokenRepository.findByUserToken(request.userToken()).orElseThrow(UserNotFoundException::new);
 
         if (!jwtProvider.validToken(request.refreshToken()) || refreshTokenObj.isNotValid(request.refreshToken())) {
+            refreshTokenRepository.delete(refreshTokenObj);
             throw new MalformedJwtException("잘못된 토큰입니다.");
         }
 
