@@ -1,6 +1,7 @@
 package me.janek.securityjava.config;
 
 import lombok.RequiredArgsConstructor;
+import me.janek.securityjava.common.JwtAccessDeniedHandler;
 import me.janek.securityjava.common.JwtAuthenticationEntryPoint;
 import me.janek.securityjava.common.JwtProvider;
 import org.springframework.context.annotation.Bean;
@@ -23,12 +24,15 @@ public class JwtSecurityConfiguration {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers(new AntPathRequestMatcher("/api/login")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/refresh-token")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/h2-console")).permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
@@ -40,6 +44,7 @@ public class JwtSecurityConfiguration {
             .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(configure -> configure
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
             );
 
         return http.build();

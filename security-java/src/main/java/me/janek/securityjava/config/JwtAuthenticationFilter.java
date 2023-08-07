@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        var excludePath = List.of("/api/login", "/hello-world", "/h2-console", "/api/refresh-token");
+        var excludePath = List.of("/api/login", "/hello-world", "/h2-console/", "/api/refresh-token");
         var path = request.getRequestURI();
         return excludePath.stream().anyMatch(path::startsWith);
     }

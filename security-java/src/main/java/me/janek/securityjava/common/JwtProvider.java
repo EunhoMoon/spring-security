@@ -59,9 +59,11 @@ public class JwtProvider {
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 서명입니다.");
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 토큰입니다.");
-        } catch (UnsupportedJwtException e) {
+        }
+//        catch (ExpiredJwtException e) {
+//            log.info("만료된 토큰입니다.");
+//        }
+        catch (UnsupportedJwtException e) {
             log.info("지원하지 않는 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("토큰이 잘못되었습니다.");
