@@ -25,10 +25,12 @@ public class JwtSecurityConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(requests -> requests.requestMatchers(
-                    new AntPathRequestMatcher("/api/login")
-                ).permitAll()
-                .anyRequest().authenticated())
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers(new AntPathRequestMatcher("/api/login")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/refresh-token")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                .anyRequest().authenticated()
+            )
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
             .httpBasic(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)

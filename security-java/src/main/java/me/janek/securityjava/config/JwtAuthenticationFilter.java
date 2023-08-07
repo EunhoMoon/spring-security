@@ -29,19 +29,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain filterChain
     ) throws ServletException, IOException {
-        log.info("Jwt Filter 호출");
         var authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
         var token = getAccessToken(authorizationHeader);
 
-        var validationStatus = jwtProvider.validToken(token);
-
-        switch (validationStatus) {
-            case INVALID_TOKEN -> throw new IllegalArgumentException(validationStatus.getDescribe());
-            default -> log.info("필터 통과");
+        if (jwtProvider.validToken(token)) {
+            var authentication = jwtProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
+            log.info("유효한 토큰이 존재하지 않습니다. {}", request.getRequestURI());
         }
-
-        var authentication = jwtProvider.getAuthentication(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }
@@ -52,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        var excludePath = List.of("/api/login", "/hello-world", "/h2-console");
+        var excludePath = List.of("/api/login", "/hello-world", "/h2-console", "/api/refresh-token");
         var path = request.getRequestURI();
         return excludePath.stream().anyMatch(path::startsWith);
     }

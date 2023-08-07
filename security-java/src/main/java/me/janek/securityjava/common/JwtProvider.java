@@ -2,6 +2,7 @@ package me.janek.securityjava.common;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import me.janek.securityjava.domain.User;
 import me.janek.securityjava.domain.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +17,7 @@ import java.util.Date;
 
 import static me.janek.securityjava.common.JwtValidationStatus.*;
 
+@Slf4j
 @Component
 public class JwtProvider {
 
@@ -51,19 +53,20 @@ public class JwtProvider {
             .compact();
     }
 
-    public JwtValidationStatus validToken(String token) {
+    public boolean validToken(String token) {
         try {
             getClaims(token);
+            return true;
         } catch (SecurityException | MalformedJwtException e) {
-            return INVALID_SIGNATURE;
+            log.info("잘못된 서명입니다.");
         } catch (ExpiredJwtException e) {
-            return EXPIRED;
+            log.info("만료된 토큰입니다.");
         } catch (UnsupportedJwtException e) {
-            return NOT_SUPPORTED;
+            log.info("지원하지 않는 토큰입니다.");
         } catch (IllegalArgumentException e) {
-            return INVALID_TOKEN;
+            log.info("토큰이 잘못되었습니다.");
         }
-        return VALID;
+        return false;
     }
 
     @Transactional

@@ -1,10 +1,8 @@
 package me.janek.securityjava.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,15 +17,21 @@ public class RefreshToken {
 
     private String userToken;
 
+    @Column(length = 500)
     private String refreshToken;
 
-    public RefreshToken(String userToken, String refreshToken) {
+    @Builder
+    private RefreshToken(String userToken, String refreshToken) {
         this.userToken = userToken;
         this.refreshToken = refreshToken;
     }
 
     public void update(String newRefreshToken) {
         this.refreshToken = newRefreshToken;
+    }
+
+    public boolean isNotValid(String refreshToken) {
+        return !this.refreshToken.equals(refreshToken);
     }
 
 }
