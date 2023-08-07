@@ -7,7 +7,6 @@ import me.janek.securityjava.common.UserNotFoundException;
 import me.janek.securityjava.interfaces.TokenRefreshRequest;
 import me.janek.securityjava.interfaces.TokenResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
